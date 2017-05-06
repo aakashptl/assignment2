@@ -2,6 +2,8 @@ body {
 	font-family: "Lato", sans-serif;
 	transition: background-color .5s;
 	padding-top: 3em;
+        background-color: rgb(24,188,156);
+        
 }
 
 .next {
@@ -15,6 +17,16 @@ body {
 .navbar-right {
     float: right !important;
     margin-right: 15px;
+}
+.navbar-custom {
+    background: #2C3E50 ;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: none;
+}
+
+.nav.navbar-nav li>a{
+    color:white;
 }
 
 .form-small .control-label {
@@ -283,3 +295,32 @@ th {
 .modal-backdrop{z-index: 1050;}
 .modal{z-index: 1060;}
 
+
+
+.center-block{
+    border-radius: 5px;
+}
+
+.panel-table td,.panel-table th{
+    border-top:0px none !important;
+    color:white;
+    
+}
+.panel-body{
+    background-color: rgb(44,62,80);
+}
+
+.panel-button
+{
+    background-color: rgb(24,188,156);
+}
+
+.panel-heading.item-panel-header
+{
+    border-bottom: 1px solid white;
+    color:white;
+    background-color: rgb(44,62,80);
+    min-height: 92px;
+    max-height: 92px;
+    overflow-y: hidden;
+}
