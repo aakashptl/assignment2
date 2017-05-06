@@ -324,3 +324,22 @@ th {
     max-height: 92px;
     overflow-y: hidden;
 }
+.panel-heading.panel-model-heading{
+    background-color: rgb(44,62,80) !important;
+}
+
+.item-panel .panel-body{
+    min-height: 385px;
+max-height: 385px;
+overflow-x: hidden;
+}
+
+.modal-table tr:nth-of-type(even){
+    color:white;
+}
+.tabel-striped tr:nth-of-type(even){
+    color:white;
+}
+#item_add{
+    background-color: rgb(24,188,156);
+}
