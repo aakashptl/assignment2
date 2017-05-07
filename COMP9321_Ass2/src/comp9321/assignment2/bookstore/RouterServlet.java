@@ -116,7 +116,10 @@ public class RouterServlet extends HttpServlet {
 		} else if (action.equals("graph_search_form")) {
 			generate_form(request, response, session);
 		}else if(action.equals("checkout_done")){
-			checkout_done(request, response, session);
+			checkout_done(request, response, session);}
+                else if(action.equals("add_cart_wishlist")){
+                cart_add_wishlist(request, response, session);
+                      
 
 		}
 		 
@@ -436,7 +439,9 @@ public class RouterServlet extends HttpServlet {
 	            session.setAttribute("fname",fname);
 	            session.setAttribute("full_address",full_address);
 	            session.setAttribute("cc",cc);
+                    
 	            session.setAttribute("cart", CartLogger.loadSavedCart(Integer.parseInt(user_id)));
+                    session.setAttribute("wishlist", CartLogger.loadSavedWishlist(Integer.parseInt(user_id)));
 			}
 			rs.close();
 		} catch (SQLException se) {
@@ -504,7 +509,7 @@ public class RouterServlet extends HttpServlet {
 		if(UserDAO.createUser(username,nickName,fname,  lname,  email,  yob,  full_address,  CC,  password,  type)){
 			
 			String body = "Hi "+ nickName + ",<br><br>Please click on the following link to complete your dblpStore Registration<br><br>";
-			body += "<a href='"+"http://localhost:8080/COMP9321_Ass2/emailConfirm.jsp?accId="+username +"'> Complete Registration</a><br><br>regards,<br>dblpAdmin" ;
+			body += "<a href='"+"http://localhost:8080/web/emailConfirm.jsp?accId="+username +"'> Complete Registration</a><br><br>regards,<br>dblpAdmin" ;
 			String subject = " Complete your registration";
 			UserDAO.sendMail(email, subject  , body);
 			response.setContentType("text/html;charset=UTF-8");
@@ -763,6 +768,87 @@ public class RouterServlet extends HttpServlet {
 				+ ")\" style=\"cursor:pointer;font-size:14px;\">"
 				+ item.ItemList.get("title")
 				+ "</a><button class=\"btn btn-warning btn-xs cart\" onclick=\"removeCartItem('cart_item"
+				+ item.getId()
+				+ "','"
+				+ item.ItemList.get("title")
+				+ "')\">Remove</button></h6></div></div>";
+
+		cart_modal = generateCartModal(item);
+
+		cart_content = cart_content.replace("\"", "\\\"");
+		cart_modal = cart_modal.replace("\"", "\\\"");
+
+		response_content = "{\"cart\":\"" + cart_content + "\",\"modal\":\""
+				+ cart_modal + "\"}";
+
+		printer.println(response_content);
+
+		// Log User activity
+		int user_id = -1;
+
+		if ((null != session.getAttribute("user_id"))) {
+			user_id = Integer.parseInt(session.getAttribute("user_id").toString());
+		}
+
+		CartLogger.logUserActivity(user_id, item.getId(), 1);
+
+	}
+        
+        
+        @SuppressWarnings("unchecked")
+	private void cart_add_wishlist(HttpServletRequest request,
+			HttpServletResponse response, HttpSession session)
+			throws IOException {
+		// Initialize the cart items list
+		ArrayList<ItemBean> cart_items = new ArrayList<ItemBean>();
+		boolean checkout_button = false;
+		String response_content = new String();
+		String cart_content = new String();
+		String cart_modal = new String();
+
+		ArrayList<ItemBean> current_cart = (ArrayList<ItemBean>) session
+				.getAttribute("wishlist");
+		PrintWriter printer = response.getWriter();
+
+		// Check if the cart exists
+		if (session.getAttribute("wishlist") != null) {
+			if (current_cart.isEmpty()) {
+				checkout_button = true;
+			}
+			cart_items = (ArrayList<ItemBean>) session.getAttribute("wishlist");
+		} else {
+			checkout_button = true;
+		}
+
+		// Get the item details to add
+		String id = request.getParameter("hashcode");
+
+		// Retrieve the item from the DB
+		ItemBean item = CustomerDAO.runQuery(
+				"select * from item where id ='" + id + "'").get(0);
+
+		// Add the item to the customer cart
+		cart_items.add(item);
+		session.setAttribute("wishlist", cart_items);
+		// response.setContentType("text/json");
+
+		if (checkout_button) {
+			cart_content = "<div class=\"col-md-12\">"
+					+ "<form method=\"post\" action=\"check_out\">"
+					+ "<input type=\"hidden\" name=\"action\" value=\"checkout\" /> <input"
+					+ " type=\"submit\" class=\"btn btn-success cart pager\""
+					+ "value=\"Checkout&nbsp;>\">" + "</form>" + "</div>";
+		}
+
+		cart_content += "<div class=\"col-md-12 panel panel-primary\" id=\"cart_item_wishlist"
+				+ item.getId()
+				+ "\"><div><h6><a id=\"cartBtn_"
+				+ item.getId()
+				+ "\" onclick=\"modal_cart_open("
+				+ item.getId()
+				+ ")\" style=\"cursor:pointer;font-size:14px;\">"
+				+ item.ItemList.get("title")
+				+ "</a><button class=\"btn btn-warning btn-xs cart\" onclick=\"removeCartItem('cart_item_wishlist"
 				+ item.getId()
 				+ "','"
 				+ item.ItemList.get("title")
