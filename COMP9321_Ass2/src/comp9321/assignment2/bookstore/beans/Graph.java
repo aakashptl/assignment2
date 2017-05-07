@@ -11,7 +11,6 @@ public class Graph {
 		return nodes;
 	}
 	
-	
 
 	public void setNodes(ArrayList<GraphNode> nodes) {
 		this.nodes = nodes;
