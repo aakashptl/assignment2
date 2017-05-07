@@ -10,6 +10,8 @@ public class Graph {
 	public ArrayList<GraphNode> getNodes() {
 		return nodes;
 	}
+	
+	
 
 	public void setNodes(ArrayList<GraphNode> nodes) {
 		this.nodes = nodes;
