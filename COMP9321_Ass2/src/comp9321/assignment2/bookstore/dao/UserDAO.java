@@ -193,7 +193,7 @@ public class UserDAO {
 			stmt = (Statement) conn.createStatement();
 
 			String query = "UPDATE users SET nickname = '"+ nickName +"', fname = '"+fname+"', lname = '"+lname+"', email ='"+email+"', yob ='"+yob+"', full_address = '"
-						+ full_address+"', cc_no = '"+CC+"', password = '"+password+", type = "+type+", acc_status = 1 , admin = 0 where username = '"+username+"';";
+						+ full_address+"', cc_no = '"+CC+"', password = '"+password+"', type = "+type+", acc_status = 1 , admin = 0 where username = '"+username+"';";
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			

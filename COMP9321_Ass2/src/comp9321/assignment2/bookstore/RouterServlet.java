@@ -543,12 +543,24 @@ public class RouterServlet extends HttpServlet {
 			full_address = getRequestParameter(request,"full_address");
 			yob = Integer.valueOf(getRequestParameter(request,"yob"));
 			password = UserDAO.getMD5(getRequestParameter(request,"password"));
+			System.out.println(getRequestParameter(request,"password"));
+			System.out.println(password);
 			type = Integer.valueOf(getRequestParameter(request,"type"));
 			CC = BigInteger.valueOf(Long.valueOf(getRequestParameter(request,"CC")));
 			
 			if(UserDAO.update(username,nickName,fname,  lname,  email,  yob,  full_address,  CC,  password,  type)){
 				response.setContentType("text/html;charset=UTF-8");
 		        response.getWriter().write("True");
+		        session.setAttribute("user_name",username);
+	            session.setAttribute("full_name",fname);
+	            session.setAttribute("email",email);
+	            session.setAttribute("type",type.toString());
+	            session.setAttribute("yob",yob);
+	            session.setAttribute("fname",fname);
+	            session.setAttribute("full_address",full_address);
+	            session.setAttribute("cc",CC);
+	            session.setAttribute("nick_name", nickName);
+	            session.setAttribute("lname", lname);
 			}
 			else{
 				response.setContentType("text/html;charset=UTF-8");

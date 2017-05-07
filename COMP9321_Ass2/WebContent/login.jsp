@@ -447,7 +447,7 @@
                                             <input type="password" name="edi_password" id="edi_password" class="form-control" placeholder="Password" value="<%=session.getAttribute("Password")%>">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="edi_confirm-password" id="edi_confirm-password" class="form-control" placeholder="Confirm Password" value="<%=session.getAttribute("nick_name")%>"> 
+                                            <input type="password" name="edi_confirm-password" id="edi_confirm-password" class="form-control" placeholder="Confirm Password" value="<%=session.getAttribute("Password")%>"> 
                                             <span id="divCheckPasswordMatch"></span><br> <span id="validCC"></span><br> <span id="validFrm"></span>
                                         </div>
                                         <div class="form-group">
