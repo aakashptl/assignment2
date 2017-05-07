@@ -18,6 +18,8 @@ import javax.mail.internet.*;
 
 import com.mysql.jdbc.Statement;
 
+import comp9321.assignment2.bookstore.DBUtils;
+
 /**
  * @author svajiraya
  *
@@ -138,29 +140,19 @@ public class UserDAO {
 	
 	public static boolean createUser(String username, String nickName, 
 			String fname, String lname, String email, Integer yob, String full_address, BigInteger CC, String password, Integer type){
-		final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-		final String DB_URL = "jdbc:mysql://localhost/bookstore?autoReconnect=true&useSSL=false";
-
-		// Database credentials
-		final String USER = "root";
-		final String PASS = "root";
 		
 		Connection conn = null;
 		Statement stmt = null;
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
-
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
 
 			String query = "INSERT INTO `users` (`id`, `username`, `nickname`, `fname`, `lname`, `email`, `yob`, `full_address`, `cc_no`, `password`, `type`, `acc_status`, `admin`) VALUES (NULL, '"+ username +"', '"+nickName+"', '"+fname+"', '"+lname+"', '"+email+"', '"+yob+"', '"+full_address+"', '"+CC+"', '"+password+"', '"+type+"', '1', '0');";
 			String sql = query ;
-			int rs = stmt.executeUpdate(sql);
-			// STEP 5: Extract data from result set
+			stmt.executeUpdate(sql);
 			
 		} catch (SQLException se) {
 			// Handle errors for JDBC
@@ -185,6 +177,48 @@ public class UserDAO {
 			}// end finally try
 		}// end try
 		
+		return true;
+	}
+	
+	public static boolean update(String username, String nickName, 
+			String fname, String lname, String email, Integer yob, String full_address, BigInteger CC, String password, Integer type){
+		
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			// STEP 3: Open a connection
+			conn = DBUtils.getConnection();
+
+			// STEP 4: Execute a query
+			stmt = (Statement) conn.createStatement();
+
+			String query = "UPDATE users SET nickname = '"+ nickName +"', fname = '"+fname+"', lname = '"+lname+"', email ='"+email+"', yob ='"+yob+"', full_address = '"
+						+ full_address+"', cc_no = '"+CC+"', password = '"+password+", type = "+type+", acc_status = 1 , admin = 0 where username = '"+username+"';";
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+			return false;
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+			return false;
+		} finally {
+			// finally block used to close resources
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
+			}// do nothing
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}// end finally try
+		}// end try
 		return true;
 	}
 

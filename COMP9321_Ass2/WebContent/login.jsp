@@ -281,8 +281,183 @@
                         <%=session.getAttribute("full_name")%>
                     </h3>
                     <em>click my face for more info<br></em>
-
                 </center>
+            	<div id="Eidt-form" role="form" style="display: none;" >
+                                        <script>
+                                            $(document)
+                                                .ready(
+                                                    function() {
+                                                        var flag = false;
+                                                        $('#edit-submit')
+                                                            .click(
+                                                                function() {
+                                                                    var user = $('#edi_username')
+                                                                        .val();
+                                                                    var nickName = $('#edi_nickName')
+                                                                        .val();
+                                                                    var fname = $('#edi_fname')
+                                                                        .val();
+                                                                    var lname = $('#edi_lname')
+                                                                        .val();
+                                                                    var email = $('#edi_email')
+                                                                        .val();
+                                                                    var yob = $('#edi_yob')
+                                                                        .val();
+                                                                    var full_address = $('#edi_address')
+                                                                        .val();
+                                                                    var type = $('#edi_type')
+                                                                        .val();
+                                                                    var CC = $('#edi_CC')
+                                                                        .val();
+                                                                    var pwd = $('#edi_password')
+                                                                        .val();
+                                                                    if (user.length == 0 ||
+                                                                        nickName.length == 0 ||
+                                                                        fname.length == 0 ||
+                                                                        lname.length == 0 ||
+                                                                        email.length == 0 ||
+                                                                        yob.length == 0 ||
+                                                                        full_address.length == 0 ||
+                                                                        CC.length == 0)
+                                                                        flag = true;
+                                                                    else
+                                                                        flag = false;
+                                                                    if (!flag) {
+                                                                        $
+                                                                            .ajax({
+                                                                                type: "POST",
+                                                                                url: "home",
+                                                                                data: {
+                                                                                    "username": user,
+                                                                                    "nickName": nickName,
+                                                                                    "full_address": full_address,
+                                                                                    "fname": fname,
+                                                                                    "lname": lname,
+                                                                                    "email": email,
+                                                                                    "yob": yob,
+                                                                                    "type": type,
+                                                                                    "CC": CC,
+                                                                                    "password": pwd,
+                                                                                    "action": "edit-file"
+                                                                                },
+
+                                                                                success: function(
+                                                                                    data) {
+                                                                                    if (data == 'True') {
+                                                                                        $(location)
+                                                                                            .attr('href','home');
+                                                                                    } else {
+                                                                                        alert('Fail....');
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                    } else {
+                                                                        $('#validFrm')
+                                                                            .html('Either one of the field is empty or Entered Data is not Valid')
+                                                                            .css('color','red');
+
+                                                                    }
+                                                                });
+                                                        $('#reg_password, #confirm-password')
+                                                            .on(
+                                                                'keyup',
+                                                                function() {
+                                                                    var pass = $('#edi_password')
+                                                                        .val();
+                                                                    var conf = $('#edi_confirm-password')
+                                                                        .val();
+                                                                    if (pass == conf) {
+                                                                        flag = false;
+                                                                        $('#divCheckPasswordMatch')
+                                                                            .html('Passwords Matching')
+                                                                            .css('color','green');
+                                                                    } else {
+                                                                        flag = true;
+                                                                        $('#divCheckPasswordMatch')
+                                                                            .html(
+                                                                                'Passwords Not Matching')
+                                                                            .css(
+                                                                                'color',
+                                                                                'red');
+                                                                    }
+
+                                                                });
+
+                                                        $('#CC')
+                                                            .on(
+                                                                'keyup',
+                                                                function() {
+                                                                    var CC = $(
+                                                                            '#edi_CC')
+                                                                        .val();
+                                                                    console
+                                                                        .log(CC);
+                                                                    if (CC.length < 16) {
+                                                                        flag = true;
+                                                                        $(
+                                                                                '#validCC')
+                                                                            .html(
+                                                                                'Credit Card Number Invalid')
+                                                                            .css(
+                                                                                'color',
+                                                                                'red');
+                                                                    } else {
+                                                                        $(
+                                                                                '#validCC')
+                                                                            .html(
+                                                                                'Credit Card Number Valid')
+                                                                            .css(
+                                                                                'color',
+                                                                                'green');
+                                                                        flag = false
+                                                                    }
+                                                                });
+
+                                                    });
+                                        </script>
+                                         <input type="text" name="edi_username" id="edi_username" tabindex="1" class="form-control" value="<%=session.getAttribute("user_name")%>">
+                                        <div class="form-group">
+                                            <input type="text" name="edi_nickName" id="edi_nickName" tabindex="1" class="form-control" placeholder="Nick Name" value="<%=session.getAttribute("nick_name")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="edi_fname" id="edi_fname" tabindex="1" class="form-control" placeholder="First Name" value="<%=session.getAttribute("fname")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="edi_lname" id="edi_lname" tabindex="1" class="form-control" placeholder="Last Name" value="<%=session.getAttribute("lname")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="email" name="edi_email" id="edi_email" tabindex="1" class="form-control" placeholder="Email Address" value="<%=session.getAttribute("email")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="edi_address" id="edi_address" tabindex="1" class="form-control" placeholder="Mailing Address" value="<%=session.getAttribute("full_address")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="number" name="edi_yob" id="edi_yob" tabindex="1" class="form-control" placeholder="Year of Birth" value="<%=session.getAttribute("yob")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="edi_type" id="edi_type" class="form-control">
+											<option value="1">Register as Customer</option>
+											<option value="2">Register as Seller</option>
+										</select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" pattern="[0-9]{13,16}" name="edi_CC" id="edi_CC" tabindex="1" class="form-control" placeholder="Credit Card number" value="<%=session.getAttribute("cc")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" name="edi_password" id="edi_password" class="form-control" placeholder="Password" value="<%=session.getAttribute("Password")%>">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" name="edi_confirm-password" id="edi_confirm-password" class="form-control" placeholder="Confirm Password" value="<%=session.getAttribute("nick_name")%>"> 
+                                            <span id="divCheckPasswordMatch"></span><br> <span id="validCC"></span><br> <span id="validFrm"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <input type="submit" name="edit-submit" id="edit-submit" tabindex="4" class="form-control btn btn-register" value="Submit Now" onClick="editProfileShow()">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
             </div>
             <!-- Modal -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -351,14 +526,25 @@
                         </div>
                         <div class="modal-footer">
                             <center>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">
-								I've heard enough about
-								<%=session.getAttribute("fname")%></button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" onClick="editProfileShow()">Edit</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </center>
                         </div>
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+            function editProfileShow(){
+            	var target=document.getElementById("Eidt-form");
+            	target.style.display="block";
+            }
+            function editProfileHide(){
+            	var target=document.getElementById("Eidt-form");
+            	target.style.display="block";
+            }
+            </script>
+            
+            
             <c:if test="${sessionScope.admin_status == 1}">
                 <center>
                     <h2>

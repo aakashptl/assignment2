@@ -1,25 +1,17 @@
 package comp9321.assignment2.bookstore.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.mysql.jdbc.Statement;
-import comp9321.assignment2.bookstore.beans.Graph;
+
+import comp9321.assignment2.bookstore.DBUtils;
 import comp9321.assignment2.bookstore.beans.GraphEdge;
 import comp9321.assignment2.bookstore.beans.GraphNode;
 
 public class GraphDAO {
-	// JDBC driver name and database URL
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/bookstore?autoReconnect=true&useSSL=false";
-
-	// Database credentials
-	static final String USER = "root";
-	static final String PASS = "root";
-
 
 	public static GraphNode retrieveEntityNodes(String query) {
 		Connection conn = null;
@@ -28,11 +20,9 @@ public class GraphDAO {
 		GraphNode node = new GraphNode();
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
@@ -81,11 +71,8 @@ public class GraphDAO {
 		ArrayList<GraphEdge> edgeList = new ArrayList<GraphEdge>();
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
-
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
@@ -135,11 +122,9 @@ public class GraphDAO {
 		ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();

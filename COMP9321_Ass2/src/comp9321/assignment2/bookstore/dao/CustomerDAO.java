@@ -1,7 +1,6 @@
 package comp9321.assignment2.bookstore.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,17 +10,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.mysql.jdbc.Statement;
 import comp9321.assignment2.bookstore.beans.CartLog;
 import comp9321.assignment2.bookstore.beans.ItemBean;
+import comp9321.assignment2.bookstore.DBUtils;
 
 public class CustomerDAO {
-
-	// JDBC driver name and database URL
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-
-	static final String DB_URL = "jdbc:mysql://localhost/bookstore?autoReconnect=true&useSSL=false";
-
-	// Database credentials
-	static final String USER = "root";
-	static final String PASS = "root";
 
 	public static void addToMap(HashMap<String, String> item, String key,
 			String value) {
@@ -53,14 +44,11 @@ public class CustomerDAO {
 		Statement stmt = null;
 		int result = 0;
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
-			String sql = query;
 			stmt = (Statement) conn.createStatement();
 			result = stmt.executeUpdate(query);	
 			System.out.println("RUNNING QUERY: "+ query);
@@ -97,11 +85,9 @@ public class CustomerDAO {
 		ArrayList<ItemBean> items_list = new ArrayList<ItemBean>();
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
@@ -180,11 +166,9 @@ public class CustomerDAO {
 		Statement stmt = null;
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
@@ -222,11 +206,8 @@ public class CustomerDAO {
 		int count = 0;
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
-
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
@@ -269,11 +250,10 @@ public class CustomerDAO {
 		CartLog cart = new CartLog();
 
 		try {
-			// STEP 2: Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
+
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();

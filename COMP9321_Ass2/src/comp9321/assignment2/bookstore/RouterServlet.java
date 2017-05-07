@@ -35,6 +35,7 @@ import comp9321.assignment2.bookstore.helpers.FormBuilder;
 import comp9321.assignment2.bookstore.helpers.GraphSearch;
 import comp9321.assignment2.bookstore.helpers.QueryBuilder;
 import comp9321.assignment2.bookstore.helpers.UploadImageHandler;
+import comp9321.assignment2.bookstore.DBUtils;
 
 /**
  * Servlet implementation class RouterServlet
@@ -42,12 +43,6 @@ import comp9321.assignment2.bookstore.helpers.UploadImageHandler;
 
 @MultipartConfig
 public class RouterServlet extends HttpServlet {
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/bookstore?autoReconnect=true&useSSL=false";
-
-	// Database credentials
-	static final String USER = "root";
-	static final String PASS = "root";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -77,7 +72,7 @@ public class RouterServlet extends HttpServlet {
 
 		String action = request.getParameter("action");
 		HttpSession session = request.getSession();
-
+		
 		
 
 		if (action.equals("add_cart")) {
@@ -98,6 +93,8 @@ public class RouterServlet extends HttpServlet {
 			logout(request, response, session);
 		} else if (action.equals("signup")) {
 			signup(request, response, session);
+		} else if (action.equals("edit-file")) {
+			edit_file(request, response, session);
 		} else if (action.equals("toggle_user")) {
 			toggle_user(request, response, session);
 		} else if (action.equals("toggle_item")) {
@@ -125,6 +122,8 @@ public class RouterServlet extends HttpServlet {
 		 
 	}
 	
+	
+
 	private void search_activity(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 		String id = request.getParameter("user");
@@ -388,7 +387,7 @@ public class RouterServlet extends HttpServlet {
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 		String uname = getRequestParameter(request, "user");
 		String password = getRequestParameter(request, "password");
-		String user_id = null, full_name = null, email = null,fname= null,yob= null, full_address=null, cc=null;
+		String user_id = null, full_name = null, email = null,fname= null,yob= null, full_address=null, cc=null, nick_name=null, lname = null;
 		Integer admin_status = null, type = null;
 //		//System.out.println("Username: " + uname + ". Password: " + password);
 		Connection conn = null;
@@ -399,7 +398,7 @@ public class RouterServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			// STEP 3: Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			conn = DBUtils.getConnection();
 
 			// STEP 4: Execute a query
 			stmt = (Statement) conn.createStatement();
@@ -415,12 +414,15 @@ public class RouterServlet extends HttpServlet {
 				i = rs.getInt("cnt");
 				fname = rs.getString("fname");
 				full_name = rs.getString("fname") + " " + rs.getString("lname");
+				lname = rs.getString("lname");
 				email = rs.getString("email");
 				admin_status = rs.getInt("admin");
 				type = rs.getInt("type");
 				yob = rs.getString("yob");
 				full_address = rs.getString("full_address");
 				cc = rs.getString("cc_no");
+				nick_name = rs.getString("nickname");
+				
 			}
 			if(i != 1) {
 				//System.out.println("User Not Found");
@@ -439,9 +441,12 @@ public class RouterServlet extends HttpServlet {
 	            session.setAttribute("fname",fname);
 	            session.setAttribute("full_address",full_address);
 	            session.setAttribute("cc",cc);
+	            session.setAttribute("nick_name", nick_name);
+	            session.setAttribute("lname", lname);
+	       
                     
 	            session.setAttribute("cart", CartLogger.loadSavedCart(Integer.parseInt(user_id)));
-                    session.setAttribute("wishlist", CartLogger.loadSavedWishlist(Integer.parseInt(user_id)));
+//                    session.setAttribute("wishlist", CartLogger.loadSavedWishlist(Integer.parseInt(user_id)));
 			}
 			rs.close();
 		} catch (SQLException se) {
@@ -456,6 +461,8 @@ public class RouterServlet extends HttpServlet {
 		}
 		
 	}
+	
+	
 
 		private void logout(HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
@@ -521,7 +528,42 @@ public class RouterServlet extends HttpServlet {
 		}
 	}
 	
-	
+	private void edit_file(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		// TODO Auto-generated method stub
+		System.out.println("123123123");
+		String username = null, nickName = null,fname = null, lname = null,email = null,full_address = null, password = null;
+		Integer yob = null,type = null;
+		BigInteger CC = null;
+		try {
+			username = getRequestParameter(request,"username");
+			nickName = getRequestParameter(request,"nickName");
+			fname = getRequestParameter(request,"fname");
+			lname = getRequestParameter(request,"lname");
+			email = getRequestParameter(request,"email");
+			full_address = getRequestParameter(request,"full_address");
+			yob = Integer.valueOf(getRequestParameter(request,"yob"));
+			password = UserDAO.getMD5(getRequestParameter(request,"password"));
+			type = Integer.valueOf(getRequestParameter(request,"type"));
+			CC = BigInteger.valueOf(Long.valueOf(getRequestParameter(request,"CC")));
+			
+			if(UserDAO.update(username,nickName,fname,  lname,  email,  yob,  full_address,  CC,  password,  type)){
+				response.setContentType("text/html;charset=UTF-8");
+		        response.getWriter().write("True");
+			}
+			else{
+				response.setContentType("text/html;charset=UTF-8");
+		        response.getWriter().write("False");
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 
 
